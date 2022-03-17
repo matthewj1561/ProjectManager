@@ -1,0 +1,62 @@
+html {
+    margin: 0;
+}
+body {
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+#nav {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    margin: 0;
+}
+
+#logo-text {
+    font-size: xx-large;
+}
+
+.small-logo-text {
+    font-size: medium;
+}
+#nav li a,
+footer {
+    text-decoration: none;
+    color: white;
+}
+
+.main-header-p {
+    color: #b3d146;
+}
+header,
+footer {
+    background-color: #2d2f30;
+    padding: 50px 10px;
+    transition: 0.4s;
+}
+
+.logo {
+    text-decoration: none;
+}
+
+.nav-item {
+    align-self: center;
+    justify-self: center;
+    padding-right: 20px;
+}
+
+#footer {
+    border-top: solid;
+    padding: 20px;
+}
