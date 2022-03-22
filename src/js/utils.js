@@ -1,3 +1,5 @@
+
+
 /**
  * RENDER WITH TEMPLATE
  * 
@@ -47,4 +49,17 @@ export async function loadHeaderFooter() {
   
     renderWithTemplate(headerTemplate, domHeader);
     renderWithTemplate(footerTemplate, domFooter);
+}
+
+export function validateInput(elementSelector, regexPattern) {
+    const value = document.querySelector(elementSelector).value;
+
+    return regexPattern.test(value);
+}
+
+export function validateAllInputs(inputsToValidate) {
+    const results = [];
+    // inputsToValidate.forEach(case => {
+    //     results.append({value: case.elementSelector, result: validateInput(case.elementSelector, case.regexPattern)});
+    // });
 }

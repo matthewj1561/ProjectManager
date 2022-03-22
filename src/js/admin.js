@@ -1,5 +1,5 @@
 import ExternalServices from "../js/externalServices";
-import { loadHeaderFooter } from "./utils.js";
+import { loadHeaderFooter, validateAllInputs } from "./utils.js";
 loadHeaderFooter();
 
 export default class Admin {
@@ -32,6 +32,12 @@ export default class Admin {
   loginPrep() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
+    const inputsToValidate = [
+      { value: email, regexPattern: /\*@*.com/ },
+      { value: password, regexPattern: /\*/ }
+    ]
+    // validateAllInputs(inputsToValidate);
+
     this.login(
       { email: email, password: password },
       this.showTasks.bind(this)
@@ -44,7 +50,7 @@ export default class Admin {
     const confirm = document.getElementById("confirm").value;
     const company = document.getElementById("company").value;
     this.signup(
-      { email: email, password: password, confirm: confirm, company: company },
+      { email: email, password: password, confirmPassword: confirm, company: company },
       this.showTasks.bind(this)
     );
   }

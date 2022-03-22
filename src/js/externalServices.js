@@ -1,7 +1,9 @@
 import { defaultListOfTasks } from "./taskModel";
 
+const TESTING = false; // Set to false if using API directly
+
 // This url is supposed to go to the API from the backend team
-const baseURL = "//157.201.228.93:2992/";
+const baseURL = "https://cse341-wdd330-task-manager.herokuapp.com/";
 
 async function convertToJson(res) {
   const jsonResponse = await res.json();
@@ -10,94 +12,118 @@ async function convertToJson(res) {
     return jsonResponse;
   } else {
     throw { name: 'servicesError', message: jsonResponse };
-    // console.log("Oops");
-    }
+  }
 }
 
 // Inside here is how we do all communications with the backend team
 export default class ExternalServices {
   constructor() {}
 
-//   async findProductById(id) {
-//     // const products = await this.getData();
-//     // return products.find((item) => item.Id === id);
-//     return fetch(baseURL + `product/${id}`)
-//       .then(convertToJson)
-//       .then((data) => data.Result);
-//   }
-
-//   getData(category) {
-//     return fetch(baseURL + `products/search/${category}`)
-//       .then(convertToJson)
-//       .then((data) => data.Result);
-//   }
-
-//   async checkout(payload) {
-//     const options = {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(payload),
-//     };
-
-//     // const thing1 = await fetch(baseURL + "checkout/", options);
-//     return await fetch(baseURL + "checkout/", options).then(convertToJson);
-//   }
-
-  // A user (a JS object consisting of email and password fields) is used to request an accessToken from the API
+  /**
+   * LOGIN REQUEST
+   * Makes a POST request to url/login using user credentials
+   * 
+   * @param {{email: string, password: string}} user 
+   * @returns string of the access token
+   */
   async loginRequest(user) {
-    /* const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    };
-    const response = await fetch(baseURL + "login", options).then(
-      convertToJson
-    ); */
+    let response = {accessToken: 1234};
 
-    const response = {accessToken: 1234};
+    if (!TESTING) {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      };
+      response = await fetch(baseURL + "login", options).then(
+        convertToJson
+      );
+    }
 
     return response.accessToken;
   }
 
-  // A user (a JS object consisting of email, password, confirm, and company fields)
-  // is used to request an accessToken from the API
+  /**
+   * SIGNUP REQUEST
+   * 
+   * Sends a PUT request to url/signup to try adding user to API
+   * 
+   * @param {{email: string, password: string, confirm: string, company: string}} user 
+   * @returns True if successful, False otherwise
+   */
   async signupRequest(user) {
-    /* const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    };
-    const response = await fetch(baseURL + "signup", options).then(
-      convertToJson
-    ); */
+    let successfulSignup = true;
 
-    const response = {accessToken: 5678};
+    if (!TESTING) {
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      };
+      const successfulSignup = await fetch(baseURL + "signup", options).then(
+        // Test connection
+        convertToJson
+      );
+    }
 
-    return response.accessToken;
+    return successfulSignup;
   }
 
-  // The user gives token to the API, which gets the correct users' company's tasks
+  /**
+   * GET ALL TASKS
+   * 
+   * Sends a GET request to url/tasks to get all task info
+   * 
+   * @param {string} token 
+   * @returns array of tasks
+   */
   async getAllTasks(token) {
-    /* const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    const response = await fetch(baseURL + "tasks", options).then(
-      convertToJson
-    );
-    */
+    let response = defaultListOfTasks;
 
-    const response = defaultListOfTasks;
+    if (!TESTING) {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      response = await fetch(baseURL + "tasks", options).then(
+        convertToJson
+      );
+    }
 
     return response;
+  }
+
+  /**
+   * LOGOUT
+   * 
+   * Sends a POST request to url/logout to logout the user
+   * 
+   * @param {string} token 
+   * @returns True for successful logout, False otherwise
+   */
+  async logout (token) {
+    let logoutSuccessful = true;
+
+    if (!TESTING) {
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      logoutSuccessful = await fetch(baseURL + "logout", options).then(
+        convertToJson
+      );
+    }
+
+    return logoutSuccessful;
   }
 }
