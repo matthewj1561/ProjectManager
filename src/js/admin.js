@@ -1,5 +1,5 @@
 import ExternalServices from "../js/externalServices";
-import { loadHeaderFooter, validateAllInputs } from "./utils.js";
+import { loadHeaderFooter, saveAuthToken, validateAllInputs } from "./utils.js";
 loadHeaderFooter();
 
 export default class Admin {
@@ -12,7 +12,9 @@ export default class Admin {
   async login(creds, next) {
     try {
       this.token = await this.services.loginRequest(creds);
-      console.log(this.token);
+      saveAuthToken(this.token);
+      window.location.href = "/user-home.html";
+      // window.location.assign("/user-home/");
       next();
     } catch (err) {
       console.log(err);
@@ -21,8 +23,10 @@ export default class Admin {
 
   async signup(creds, next) {
     try {
-      this.token = await this.services.signupRequest(creds);
-      console.log(this.token);
+      this.success = await this.services.signupRequest(creds);
+      console.log(this.success);
+      window.location.href = "/login/";
+      // window.location.assign("/login/");
       next();
     } catch (err) {
       console.log(err);
@@ -108,5 +112,17 @@ export default class Admin {
     this.mainElement.innerHTML = form;
     const submit = document.getElementById("submitButton");
     submit.addEventListener("click", this.signupPrep.bind(this));
+  }
+
+  showUserTabs() {
+    const display = `
+    <ul>
+      <li class="active" id="currentTasks">My Ongoing Tasks</li>
+      <li id="allMyTasks">All My Tasks</li>
+      <li id="unassignedTasks">Unassigned Tasks</li>
+      <li id="myRequests">My Task Requests</li>
+    </ul>`;
+
+    this.mainElement.innerHTML = display;
   }
 }

@@ -1,9 +1,16 @@
 import { defaultListOfTasks } from "./taskModel";
 
-const TESTING = false; // Set to false if using API directly
+const TESTING = true; // Set to false if using API directly
 
 // This url is supposed to go to the API from the backend team
 const baseURL = "https://cse341-wdd330-task-manager.herokuapp.com/";
+
+// A collection of mock urls to test points of the site
+const signupTestURL = "https://ezmock.herokuapp.com/api/623a05f4fa803c0015c625ea";
+const loginTestURL = "https://run.mocky.io/v3/29bd5f9e-a0ac-4ba0-9219-ce44ee001501";
+const allTasksTestURL = "https://run.mocky.io/v3/23136aa1-7371-47a8-b378-54886e8f6aea";
+const singleTaskTestURL = "https://run.mocky.io/v3/2a4db3d0-4536-40d9-b6fd-47a4caf1a6e6";
+const logoutTestURL = "";
 
 async function convertToJson(res) {
   const jsonResponse = await res.json();
@@ -29,15 +36,19 @@ export default class ExternalServices {
   async loginRequest(user) {
     let response = {accessToken: 1234};
 
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    };
     if (!TESTING) {
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      };
       response = await fetch(baseURL + "login", options).then(
+        convertToJson
+        );
+    } else {
+      response = await fetch(loginTestURL).then(
         convertToJson
       );
     }
@@ -54,23 +65,25 @@ export default class ExternalServices {
    * @returns True if successful, False otherwise
    */
   async signupRequest(user) {
-    let successfulSignup = true;
+    let response = { "signupSuccess": false };
 
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    };
     if (!TESTING) {
-      const options = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      };
-      const successfulSignup = await fetch(baseURL + "signup", options).then(
+      response = await fetch(baseURL + "signup", options).then(
         // Test connection
         convertToJson
       );
+    } else {
+      response = await fetch(signupTestURL).then(convertToJson)
     }
 
-    return successfulSignup;
+    return response.signupSuccess;
   }
 
   /**
@@ -84,17 +97,19 @@ export default class ExternalServices {
   async getAllTasks(token) {
     let response = defaultListOfTasks;
 
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
     if (!TESTING) {
-      const options = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
       response = await fetch(baseURL + "tasks", options).then(
         convertToJson
       );
+    } else {
+      response = await fetch(allTasksTestURL).then(convertToJson)
     }
 
     return response;
@@ -109,21 +124,23 @@ export default class ExternalServices {
    * @returns True for successful logout, False otherwise
    */
   async logout (token) {
-    let logoutSuccessful = true;
+    let response = { "logoutSuccess": false };
 
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
     if (!TESTING) {
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      logoutSuccessful = await fetch(baseURL + "logout", options).then(
+      response = await fetch(baseURL + "logout", options).then(
         convertToJson
       );
+    } else {
+      response = await fetch(logoutTestURL).then(convertToJson)
     }
 
-    return logoutSuccessful;
+    return response.logoutSuccess;
   }
 }

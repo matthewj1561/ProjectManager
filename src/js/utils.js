@@ -20,6 +20,27 @@ export function renderWithTemplate(template, parentElement, data, callback) {
     parentElement.appendChild(clone);
 }
 
+export function renderListWithTemplate(
+  template,
+  parentElement,
+  list,
+  callback
+) {
+  list.forEach((product) => {
+    const clone = template.content.cloneNode(true);
+    const hydratedTemplate = callback(clone, product);
+    parentElement.appendChild(hydratedTemplate);
+  });
+}
+
+export function getParam(param) {
+  const querystring = window.location.search;
+  const urlParams = new URLSearchParams(querystring);
+  const product = urlParams.get(param);
+
+  return product;
+}
+
 /**
  * LOAD TEMPLATE
  *
@@ -90,4 +111,17 @@ export function validateAllInputs(inputsToValidate) {
     // inputsToValidate.forEach(case => {
     //     results.append({value: case.elementSelector, result: validateInput(case.elementSelector, case.regexPattern)});
     // });
+}
+
+export function saveAuthToken(authToken) {
+    console.log("Saving authtoken ", authToken);
+    localStorage.setItem("authToken", JSON.stringify(authToken));
+}
+
+export function readAuthToken() {
+    return JSON.parse(localStorage.getItem("authToken"));
+}
+
+export function addOnClick(element, action) {
+    element.addEventListener("click", action);
 }
