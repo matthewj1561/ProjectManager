@@ -10,11 +10,11 @@ h1 {
     margin: 0;
 }
 
-.sticky {
+/* .sticky {
     position: fixed;
     top: 0;
     width: 100%;
-}
+} */
 
 #nav {
     display: flex;
@@ -39,7 +39,11 @@ footer {
 .main-header-p {
     color: #b3d146;
 }
-header,
+header {
+    background-color: #2d2f30;
+    padding: 10px 10px;
+    transition: 0.4s;
+}
 footer {
     background-color: #2d2f30;
     padding: 50px 10px;

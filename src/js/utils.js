@@ -1,3 +1,5 @@
+import { doc } from 'prettier';
+
 /**
  * RENDER WITH TEMPLATE
  *
@@ -50,29 +52,40 @@ export async function loadHeaderFooter() {
 
     let navbar = document.querySelector('#header');
 
-    // Get the offset position of the navbar
-    let sticky = navbar.offsetTop;
-
-    function myFunction() {
-        if (
-            document.body.scrollTop > 80 ||
-            document.documentElement.scrollTop > 80
-        ) {
-            navbar.classList.add('sticky');
-            navbar.style.padding = '20px 0px';
-
-            document
-                .querySelector('#logo-text')
-                .classList.add('small-logo-text');
-        } else {
-            navbar.classList.remove('sticky');
-            navbar.style.padding = '50px 10px';
-            document
-                .querySelector('#logo-text')
-                .classList.remove('small-logo-text');
-        }
+    if (
+        window.location.pathname == '/index.html' ||
+        window.location.pathname == '/'
+    ) {
+        document.querySelector('#nav-link').style.display = 'block';
+        document.querySelector('.dropdown').style.display = 'none';
+    } else {
+        document.querySelector('#nav-link').style.display = 'none';
+        document.querySelector('.dropdown').style.display = 'block';
     }
-    window.onscroll = function () {
-        myFunction();
-    };
+
+    // // Get the offset position of the navbar
+    // let sticky = navbar.offsetTop;
+
+    // function dynamicNav() {
+    //     if (
+    //         document.body.scrollTop > 80 ||
+    //         document.documentElement.scrollTop > 80
+    //     ) {
+    //         navbar.classList.add('sticky');
+    //         navbar.style.padding = '20px 0px';
+
+    //         document
+    //             .querySelector('#logo-text')
+    //             .classList.add('small-logo-text');
+    //     } else {
+    //         navbar.classList.remove('sticky');
+    //         navbar.style.padding = '50px 10px';
+    //         document
+    //             .querySelector('#logo-text')
+    //             .classList.remove('small-logo-text');
+    //     }
+    // }
+    // window.onscroll = function () {
+    //     dynamicNav();
+    // };
 }
