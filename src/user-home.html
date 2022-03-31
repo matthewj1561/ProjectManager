@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing</title>
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/main.js" type="module"></script>
     <script src="/js/user-home.js"  type="module">
     </script>
@@ -14,15 +15,17 @@
     
     <h1>User Landing page</h1>
 
-    <div id="filter-selection"></div>
+    <ul id="filter-selection"></ul>
 
     <div id="task-display"></div>
 
     <template id="task-template">
         <a class="task-display" href="/task-details.html?task=">
-            <h2 class="title">Title</h2>
-            <small class="due-date">Due: </small>
-            <p class="priority">Priority: </p>
+            <div class="card">
+                <h2 class="title">Title</h2>
+                <small class="due-date">Due: </small>
+                <p class="priority">Priority: </p>
+            </div>
         </a>
     </template>
 

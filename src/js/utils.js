@@ -125,3 +125,13 @@ export function readAuthToken() {
 export function addOnClick(element, action) {
     element.addEventListener("click", action);
 }
+
+export function createNewElement(elementType, className, idName, innerString) {
+    const newElement = document.createElement(elementType);
+
+    newElement.classList.add(className);
+    newElement.id = idName;
+    newElement.innerHTML = innerString;
+
+    return newElement;
+}

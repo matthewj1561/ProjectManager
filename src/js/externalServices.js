@@ -8,9 +8,10 @@ const baseURL = "https://cse341-wdd330-task-manager.herokuapp.com/";
 // A collection of mock urls to test points of the site
 const signupTestURL = "https://ezmock.herokuapp.com/api/623a05f4fa803c0015c625ea";
 const loginTestURL = "https://run.mocky.io/v3/29bd5f9e-a0ac-4ba0-9219-ce44ee001501";
-const allTasksTestURL = "https://run.mocky.io/v3/23136aa1-7371-47a8-b378-54886e8f6aea";
+const allTasksTestURL = "https://run.mocky.io/v3/bbbee1b4-2427-4424-929d-b4332e839754";
 const singleTaskTestURL = "https://run.mocky.io/v3/2a4db3d0-4536-40d9-b6fd-47a4caf1a6e6";
 const logoutTestURL = "";
+const getUserURL = "https://run.mocky.io/v3/13c5b982-4841-4b8a-8544-8cb35871ec70";
 
 async function convertToJson(res) {
   const jsonResponse = await res.json();
@@ -142,5 +143,47 @@ export default class ExternalServices {
     }
 
     return response.logoutSuccess;
+  }
+
+  async getUser(token) {
+    let response = null;
+
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    if (!TESTING) {
+      response = await fetch(baseURL + "user", options).then(
+        convertToJson
+      );
+    } else {
+      response = await fetch(getUserURL).then(convertToJson)
+    }
+
+    return response;
+  }
+
+  async getSingleTask(token, taskId) {
+    let response = null;
+
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    if (!TESTING) {
+      response = await fetch(baseURL + "task?task=" + taskId, options).then(
+        convertToJson
+      );
+    } else {
+      response = await fetch(singleTaskTestURL).then(convertToJson)
+    }
+
+    return response;
   }
 }
