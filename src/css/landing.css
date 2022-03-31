@@ -1,0 +1,99 @@
+.filter-selection{
+    list-style-type: none;
+    display: flex;
+    border: solid;
+    justify-content: space-between;
+    padding: 0;
+    width: 60%;
+    margin-bottom: 0;
+    margin: 10px 10px 0px 10px;
+    border-bottom: none;
+}
+#filter-selection li {
+
+}
+
+#task-display{
+    margin-top: 0;
+    border: solid;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+    padding: 10px;
+    margin: 0px 10px 10px 10px;
+    min-height: 400px
+}
+
+.card {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.title {
+    grid-row: 2;
+    grid-column: 1/4;
+    text-align: center;
+    align-self: center;
+}
+
+.due-date {
+    grid-row: 1;
+    grid-column: 3;
+    text-align: center;
+    align-self: center;
+}
+
+.priority {
+    grid-row:3;
+    grid-column: 1;
+    text-align: center;
+    align-self: center;
+}
+
+#new-task{
+    bottom: 200px;
+    right: 20px;
+    margin: 10px;
+    position: fixed;
+    width: 100px;
+    height: 50px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  #modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }

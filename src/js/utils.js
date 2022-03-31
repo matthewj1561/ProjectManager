@@ -1,5 +1,3 @@
-import { doc } from 'prettier';
-
 /**
  * RENDER WITH TEMPLATE
  *
@@ -18,6 +16,27 @@ export function renderWithTemplate(template, parentElement, data, callback) {
         clone = callback(clone, data);
     }
     parentElement.appendChild(clone);
+}
+
+export function renderListWithTemplate(
+    template,
+    parentElement,
+    list,
+    callback
+) {
+    list.forEach((product) => {
+        const clone = template.content.cloneNode(true);
+        const hydratedTemplate = callback(clone, product);
+        parentElement.appendChild(hydratedTemplate);
+    });
+}
+
+export function getParam(param) {
+    const querystring = window.location.search;
+    const urlParams = new URLSearchParams(querystring);
+    const product = urlParams.get(param);
+
+    return product;
 }
 
 /**
@@ -54,12 +73,16 @@ export async function loadHeaderFooter() {
 
     if (
         window.location.pathname == '/index.html' ||
-        window.location.pathname == '/'
+        window.location.pathname == '/' ||
+        window.location.pathname == '/signup' ||
+        window.location.pathname == '/login.html'
     ) {
-        document.querySelector('#nav-link').style.display = 'block';
+        document.querySelector('#login').style.display = 'block';
+        document.querySelector('#signup').style.display = 'block';
         document.querySelector('.dropdown').style.display = 'none';
     } else {
-        document.querySelector('#nav-link').style.display = 'none';
+        document.querySelector('#login').style.display = 'none';
+        document.querySelector('#signup').style.display = 'none';
         document.querySelector('.dropdown').style.display = 'block';
     }
 
@@ -88,4 +111,40 @@ export async function loadHeaderFooter() {
     // window.onscroll = function () {
     //     dynamicNav();
     // };
+}
+
+export function validateInput(elementSelector, regexPattern) {
+    const value = document.querySelector(elementSelector).value;
+
+    return regexPattern.test(value);
+}
+
+export function validateAllInputs(inputsToValidate) {
+    const results = [];
+    // inputsToValidate.forEach(case => {
+    //     results.append({value: case.elementSelector, result: validateInput(case.elementSelector, case.regexPattern)});
+    // });
+}
+
+export function saveAuthToken(authToken) {
+    console.log('Saving authtoken ', authToken);
+    localStorage.setItem('authToken', JSON.stringify(authToken));
+}
+
+export function readAuthToken() {
+    return JSON.parse(localStorage.getItem('authToken'));
+}
+
+export function addOnClick(element, action) {
+    element.addEventListener('click', action);
+}
+
+export function createNewElement(elementType, className, idName, innerString) {
+    const newElement = document.createElement(elementType);
+
+    newElement.classList.add(className);
+    newElement.id = idName;
+    newElement.innerHTML = innerString;
+
+    return newElement;
 }
