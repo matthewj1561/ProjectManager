@@ -5,13 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
-    <script src="/js/main.js" type="module"></script>
+    <script type="module">
+        import Admin from "../js/admin.js";
+        const admin = new Admin('signup-space');
+        admin.showSignup();
+
+    </script>
 </head>
 <body>
-    <header id="main-header"></header>
-    
-    <h1>Signup page</h1>
+    <header id="header" class="divider"></header>
+    <main>
+        <div id="signup-space">
 
+        </div>
+    </main>
     <footer id="main-footer"></footer>
 </body>
 </html>
