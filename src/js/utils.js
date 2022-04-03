@@ -122,6 +122,15 @@ export function readAuthToken() {
     return JSON.parse(localStorage.getItem("authToken"));
 }
 
+export function saveId(id) {
+    console.log("Saving id ", id);
+    localStorage.setItem("task-user-id", JSON.stringify(id));
+}
+
+export function readId() {
+    return JSON.parse(localStorage.getItem("task-user-id"));
+}
+
 export function addOnClick(element, action) {
     element.addEventListener("click", action);
 }

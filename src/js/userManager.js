@@ -1,5 +1,5 @@
 import ExternalServices from "../js/externalServices";
-import { readAuthToken, renderListWithTemplate, saveAuthToken, addOnClick, createNewElement } from "./utils.js";
+import { readAuthToken, renderListWithTemplate, saveAuthToken, addOnClick, createNewElement, readId } from "./utils.js";
 
 export default class UserManager {
   constructor(filterSelector, listSelector) {
@@ -16,7 +16,8 @@ export default class UserManager {
     this.token = readAuthToken();
     if (this.token !== null) {
         this.taskList = await this.services.getAllTasks(this.token);
-        this.user = await this.services.getUser(this.token);
+        const myId = { "_id": readId() };
+        this.user = await this.services.getUser(this.token, myId);
         this.myTaskFilter();
     } else {
         // If they aren't logged in, send them to login page

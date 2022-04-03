@@ -1,33 +1,31 @@
 import ExternalServices from "../js/externalServices";
-import { loadHeaderFooter, saveAuthToken, validateAllInputs } from "./utils.js";
+import { loadHeaderFooter, saveAuthToken, saveId, validateAllInputs } from "./utils.js";
 loadHeaderFooter();
 
 export default class Admin {
   constructor(outputSelector) {
     this.mainElement = document.getElementById(outputSelector);
-    this.token = null;
+    // this.token = null;
     this.services = new ExternalServices();
   }
 
-  async login(creds, next) {
+  async login(creds) {
     try {
-      this.token = await this.services.loginRequest(creds);
-      saveAuthToken(this.token);
+      const response = await this.services.loginRequest(creds);
+      // this.token = response.accessToken;
+      saveId(response.user_id);
+      saveAuthToken(response.accessToken);
       window.location.href = "/user-home.html";
-      // window.location.assign("/user-home/");
-      next();
     } catch (err) {
       console.log(err);
     }
   }
 
-  async signup(creds, next) {
+  async signup(creds) {
     try {
       this.success = await this.services.signupRequest(creds);
       console.log(this.success);
-      window.location.href = "/login/";
-      // window.location.assign("/login/");
-      next();
+      window.location.href = "/login.html";
     } catch (err) {
       console.log(err);
     }
@@ -36,35 +34,23 @@ export default class Admin {
   loginPrep() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const inputsToValidate = [
-      { value: email, regexPattern: /\*@*.com/ },
-      { value: password, regexPattern: /\*/ }
-    ]
-    // validateAllInputs(inputsToValidate);
 
     this.login(
-      { email: email, password: password },
-      this.showTasks.bind(this)
+      { email: email, password: password }
     );
   }
 
   signupPrep() {
+    const first = document.getElementById("first").value;
+    const last = document.getElementById("last").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const confirm = document.getElementById("confirm").value;
     const company = document.getElementById("company").value;
-    this.signup(
-      { email: email, password: password, confirmPassword: confirm, company: company },
-      this.showTasks.bind(this)
-    );
-  }
-
-  async showTasks() {
-    try {
-      const tasks = await this.services.getAllTasks(this.token);
-      console.log(tasks);
-    } catch (err) {
-      console.log(err);
+    if (password.length > 4 && password === confirm) {
+      this.signup(
+        { first_name: first, last_name: last, email: email, password: password, company: company }
+      );
     }
   }
 
@@ -91,6 +77,14 @@ export default class Admin {
     const form = `<fieldset class="login-form">
     <legend>Signup</legend>
     <p>
+      <label for="first">First Name</label>
+      <input type="text" placeholder="first" id="first"/>
+    </p>
+    <p>
+      <label for="last">Last Name</label>
+      <input type="text" placeholder="last" id="last"/>
+    </p>
+    <p>
       <label for="email">Email</label>
       <input type="text" placeholder="email" id="email"/>
     </p>
@@ -112,17 +106,5 @@ export default class Admin {
     this.mainElement.innerHTML = form;
     const submit = document.getElementById("submitButton");
     submit.addEventListener("click", this.signupPrep.bind(this));
-  }
-
-  showUserTabs() {
-    const display = `
-    <ul>
-      <li class="active" id="currentTasks">My Ongoing Tasks</li>
-      <li id="allMyTasks">All My Tasks</li>
-      <li id="unassignedTasks">Unassigned Tasks</li>
-      <li id="myRequests">My Task Requests</li>
-    </ul>`;
-
-    this.mainElement.innerHTML = display;
   }
 }
