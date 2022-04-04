@@ -48,10 +48,10 @@ export default class Admin {
     }
 
     newTaskPrep(event) {
-        let form = document.querySelector('#taskForm');
-        const data = new FormData(form);
-        event.preventDefault();
-        console.log(data.getAll());
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm').value;
+        const company = document.getElementById('company').value;
         // let output = '';
         // for (const entry of data) {
         //     output = output = entry[0] + '=' + entry[1] + '\n';
