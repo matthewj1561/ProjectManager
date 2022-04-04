@@ -53,6 +53,7 @@ export default class ExternalServices {
       response = await fetch(loginTestURL).then(
         convertToJson
       );
+      response.user_id = 0;
     }
 
     return response;

@@ -7,18 +7,43 @@
     <title>Landing</title>
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/main.js" type="module"></script>
-    <script src="/js/user-home.js"  type="module">
-    </script>
+    <link rel="stylesheet" href="css/template.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <script src="js/taskPage.js"></script>
+    <script src="js/user-home.js"  type="module"></script>
+    <script src="js/taskAddition.js" defer></script>
+
+    
 </head>
 <body>
     <header id="header"></header>
     
     <h1>User Landing page</h1>
 
-    <ul id="filter-selection"></ul>
+    <ul id ="filter-selection" class="filter-selection"></ul>
 
     <div id="task-display"></div>
+    <button id="new-task">New Task</button>
 
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div id="modal-content">
+      <span id="close">&times;</span>
+      <script type="module">
+        import Admin from "/js/admin.js";
+        const admin = new Admin('modal-content');
+        admin.showTaskAddition();
+
+        </script>
+
+
+    </div>
+  
+  </div>
     <template id="task-template">
         <a class="task-display" href="/task-details.html?task=">
             <div class="card">

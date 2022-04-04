@@ -1,114 +1,152 @@
-import ExternalServices from "../js/externalServices";
-import { readAuthToken, renderListWithTemplate, saveAuthToken, addOnClick, createNewElement, readId } from "./utils.js";
+import ExternalServices from '../js/externalServices';
+import {
+    readAuthToken,
+    renderListWithTemplate,
+    saveAuthToken,
+    addOnClick,
+    createNewElement,
+    readId
+} from './utils.js';
 
 export default class UserManager {
-  constructor(filterSelector, listSelector) {
-    this.filterElement = document.getElementById(filterSelector);
-    this.listElement = document.getElementById(listSelector);
-    this.token = null;
-    this.user = {};
-    this.services = new ExternalServices();
-    this.taskList = [];
-    this.activeFilter = ""
-  }
-
-  async init() {
-    this.token = readAuthToken();
-    if (this.token !== null) {
-        this.taskList = await this.services.getAllTasks(this.token);
-        const myId = { "_id": readId() };
-        this.user = await this.services.getUser(this.token, myId);
-        this.myTaskFilter();
-    } else {
-        // If they aren't logged in, send them to login page
-        window.location.href = "/login.html";
+    constructor(filterSelector, listSelector) {
+        this.filterElement = document.getElementById(filterSelector);
+        this.listElement = document.getElementById(listSelector);
+        this.token = null;
+        this.user = {};
+        this.services = new ExternalServices();
+        this.taskList = [];
+        this.activeFilter = '';
     }
-    
-  }
 
-  showUserTabs() {
-    const myTasks = createNewElement('li', 'filter', 'myTasks', 'My Ongoing Tasks');
-    addOnClick(myTasks, this.myTaskFilter.bind(this));
-    this.filterElement.append(myTasks);
+    async init() {
+        this.token = readAuthToken();
+        if (this.token !== null) {
+            this.taskList = await this.services.getAllTasks(this.token);
+            const myId = { "_id": readId() };
+            this.user = await this.services.getUser(this.token, myId);
+            this.myTaskFilter();
+        } else {
+            // If they aren't logged in, send them to login page
+            window.location.href = "/login.html";
+        }    
+    }
 
-    const allTasks = createNewElement('li', 'filter', 'allTasks', 'All Company Tasks');
-    addOnClick(allTasks, this.allTaskFilter.bind(this));
-    this.filterElement.append(allTasks);
+    showUserTabs() {
+        const myTasks = createNewElement(
+            'li',
+            'filter',
+            'myTasks',
+            'My Ongoing Tasks'
+        );
+        addOnClick(myTasks, this.myTaskFilter.bind(this));
+        this.filterElement.appendChild(myTasks);
 
-    const unclaimedTasks = createNewElement('li', 'filter', 'unclaimedTasks', 'Unclaimed Tasks');
-    addOnClick(unclaimedTasks, this.unclaimedTaskFilter.bind(this));
-    this.filterElement.append(unclaimedTasks);
+        const allTasks = createNewElement(
+            'li',
+            'filter',
+            'allTasks',
+            'All Company Tasks'
+        );
+        addOnClick(allTasks, this.allTaskFilter.bind(this));
+        this.filterElement.appendChild(allTasks);
 
-    const myRequests = createNewElement('li', 'filter', 'myRequests', 'My Task Requests');
-    addOnClick(myRequests, this.myRequestsFilter.bind(this));
-    this.filterElement.append(myRequests);
-  }
+        const unclaimedTasks = createNewElement(
+            'li',
+            'filter',
+            'unclaimedTasks',
+            'Unclaimed Tasks'
+        );
+        addOnClick(unclaimedTasks, this.unclaimedTaskFilter.bind(this));
 
-  showTaskList(filteredTasks) {
-    // Clear current list first
+        this.filterElement.appendChild(unclaimedTasks);
 
-    this.listElement.innerHTML = "";
-    const template = document.getElementById("task-template");
-    
-    renderListWithTemplate(template, this.listElement, filteredTasks, this.fillTaskThumbnail);
-  }
+        const myRequests = createNewElement(
+            'li',
+            'filter',
+            'myRequests',
+            'My Task Requests'
+        );
+        addOnClick(myRequests, this.myRequestsFilter.bind(this));
+        this.filterElement.appendChild(myRequests);
+    }
 
-  fillTaskThumbnail(element, task) {
-    element.querySelector(".title").innerHTML = task.title;
-    element.querySelector(".priority").innerHTML += task.priority;
-    element.querySelector(".due-date").innerHTML += task.due_date;
+    showTaskList(filteredTasks) {
+        // Clear current list first
 
-    element.querySelector(".task-display").href += task._id;
+        this.listElement.innerHTML = '';
+        const template = document.getElementById('task-template');
 
-    return element;
-  }
+        renderListWithTemplate(
+            template,
+            this.listElement,
+            filteredTasks,
+            this.fillTaskThumbnail
+        );
+    }
 
-  updateActiveFilter(filterSelector) {
-    const filterList = document.querySelectorAll(".filter");
+    fillTaskThumbnail(element, task) {
+        element.querySelector('.title').innerHTML = task.title;
+        element.querySelector('.priority').innerHTML += task.priority;
+        element.querySelector('.due-date').innerHTML += task.due_date;
 
-    filterList.forEach(item => {
-      item.classList.remove("active");
-    });
+        element.querySelector('.task-display').href += task._id;
 
-    document.querySelector(filterSelector).classList.add("active");
-  }
+        return element;
+    }
 
+    updateActiveFilter(filterSelector) {
+        let filterList = document.querySelectorAll('.filter');
 
-  /********
-   * FILTERS
-   * 
-   * Different filters to narrow down task search
-   */
+        filterList.forEach((item) => {
+            item.classList.remove('active');
+        });
+        let listElms = document.querySelectorAll(filterSelector);
+        listElms[0].classList.add('active');
+        // listElms[1].classList.add('active');
+        // document.querySelector(filterSelector).classList.add('active');
+        // document.querySelector(filterSelector).classList.add('active');
+    }
 
-  myTaskFilter() {
-    const filteredList = this.taskList.filter(task => task.assigned_to === this.user._id);
+    /********
+     * FILTERS
+     *
+     * Different filters to narrow down task search
+     */
 
-    this.updateActiveFilter("#myTasks");
+    myTaskFilter() {
+        const filteredList = this.taskList.filter(
+            (task) => task.assigned_to === this.user._id
+        );
 
-    this.showTaskList(filteredList);
-  }
+        this.updateActiveFilter('#myTasks');
 
-  allTaskFilter() {
-    this.updateActiveFilter("#allTasks");
+        this.showTaskList(filteredList);
+    }
 
-    this.showTaskList(this.taskList);
-  }
+    allTaskFilter() {
+        this.updateActiveFilter('#allTasks');
 
-  unclaimedTaskFilter() {
-    const filteredList = this.taskList.filter(task => task.assigned_to === null);
+        this.showTaskList(this.taskList);
+    }
 
-    this.updateActiveFilter("#unclaimedTasks");
+    unclaimedTaskFilter() {
+        const filteredList = this.taskList.filter(
+            (task) => task.assigned_to === null
+        );
 
-    this.showTaskList(filteredList);
-  }
+        this.updateActiveFilter('#unclaimedTasks');
 
-  myRequestsFilter() {
-    const filteredList = this.taskList.filter(task => task.creator_user_id === this.user._id);
+        this.showTaskList(filteredList);
+    }
 
-    this.updateActiveFilter("#myRequests");
+    myRequestsFilter() {
+        const filteredList = this.taskList.filter(
+            (task) => task.creator_user_id === this.user._id
+        );
 
-    this.showTaskList(filteredList);
-  }
+        this.updateActiveFilter('#myRequests');
 
-
+        this.showTaskList(filteredList);
+    }
 }

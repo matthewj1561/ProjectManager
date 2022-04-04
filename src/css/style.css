@@ -13,6 +13,6 @@
 }
 
 .active {
-    background-color: lightyellow;
-    border: 1px blue solid;
+    background-color: gray;
+    border: 1px white;
 }
