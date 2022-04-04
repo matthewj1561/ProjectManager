@@ -5,11 +5,12 @@ import {
     saveAuthToken,
     addOnClick,
     createNewElement,
+    readId
 } from './utils.js';
 
 export default class UserManager {
     constructor(filterSelector, listSelector) {
-        this.filterElement = document.getElementsByClassName(filterSelector);
+        this.filterElement = document.getElementById(filterSelector);
         this.listElement = document.getElementById(listSelector);
         this.token = null;
         this.user = {};
@@ -22,83 +23,52 @@ export default class UserManager {
         this.token = readAuthToken();
         if (this.token !== null) {
             this.taskList = await this.services.getAllTasks(this.token);
-            this.user = await this.services.getUser(this.token);
+            const myId = { "_id": readId() };
+            this.user = await this.services.getUser(this.token, myId);
             this.myTaskFilter();
         } else {
             // If they aren't logged in, send them to login page
-            window.location.href = '/login.html';
-        }
+            window.location.href = "/login.html";
+        }    
     }
 
     showUserTabs() {
-        const myTasks1 = createNewElement(
+        const myTasks = createNewElement(
             'li',
             'filter',
             'myTasks',
             'My Ongoing Tasks'
         );
-        const myTasks2 = createNewElement(
-            'li',
-            'filter',
-            'myTasks',
-            'My Ongoing Tasks'
-        );
-        addOnClick(myTasks1, this.myTaskFilter.bind(this));
-        addOnClick(myTasks2, this.myTaskFilter.bind(this));
-        this.filterElement[0].append(myTasks1);
-        this.filterElement[1].append(myTasks2);
+        addOnClick(myTasks, this.myTaskFilter.bind(this));
+        this.filterElement.appendChild(myTasks);
 
-        const allTasks1 = createNewElement(
+        const allTasks = createNewElement(
             'li',
             'filter',
             'allTasks',
             'All Company Tasks'
         );
-        const allTasks2 = createNewElement(
-            'li',
-            'filter',
-            'allTasks',
-            'All Company Tasks'
-        );
-        addOnClick(allTasks1, this.allTaskFilter.bind(this));
-        addOnClick(allTasks2, this.allTaskFilter.bind(this));
-        this.filterElement[0].append(allTasks1);
-        this.filterElement[1].append(allTasks2);
+        addOnClick(allTasks, this.allTaskFilter.bind(this));
+        this.filterElement.appendChild(allTasks);
 
-        const unclaimedTasks1 = createNewElement(
+        const unclaimedTasks = createNewElement(
             'li',
             'filter',
             'unclaimedTasks',
             'Unclaimed Tasks'
         );
-        const unclaimedTasks2 = createNewElement(
-            'li',
-            'filter',
-            'unclaimedTasks',
-            'Unclaimed Tasks'
-        );
-        addOnClick(unclaimedTasks1, this.unclaimedTaskFilter.bind(this));
-        addOnClick(unclaimedTasks2, this.unclaimedTaskFilter.bind(this));
+        addOnClick(unclaimedTasks, this.unclaimedTaskFilter.bind(this));
 
-        this.filterElement[0].append(unclaimedTasks1);
-        this.filterElement[1].append(unclaimedTasks2);
+        this.filterElement.appendChild(unclaimedTasks);
 
-        const myRequests1 = createNewElement(
+        const myRequests = createNewElement(
             'li',
             'filter',
             'myRequests',
             'My Task Requests'
         );
-        const myRequests2 = createNewElement(
-            'li',
-            'filter',
-            'myRequests',
-            'My Task Requests'
-        );
-        addOnClick(myRequests1, this.myRequestsFilter.bind(this));
-        addOnClick(myRequests2, this.myRequestsFilter.bind(this));
-        this.filterElement[0].append(myRequests1);
-        this.filterElement[1].append(myRequests2);
+        addOnClick(myRequests, this.myRequestsFilter.bind(this));
+        this.filterElement.appendChild(myRequests);
     }
 
     showTaskList(filteredTasks) {
@@ -133,7 +103,7 @@ export default class UserManager {
         });
         let listElms = document.querySelectorAll(filterSelector);
         listElms[0].classList.add('active');
-        listElms[1].classList.add('active');
+        // listElms[1].classList.add('active');
         // document.querySelector(filterSelector).classList.add('active');
         // document.querySelector(filterSelector).classList.add('active');
     }

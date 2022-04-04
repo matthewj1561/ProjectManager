@@ -4,6 +4,7 @@ const TESTING = true; // Set to false if using API directly
 
 // This url is supposed to go to the API from the backend team
 const baseURL = "https://cse341-wdd330-task-manager.herokuapp.com/";
+// const baseURL = "http://localhost:8080/";
 
 // A collection of mock urls to test points of the site
 const signupTestURL = "https://ezmock.herokuapp.com/api/623a05f4fa803c0015c625ea";
@@ -52,9 +53,10 @@ export default class ExternalServices {
       response = await fetch(loginTestURL).then(
         convertToJson
       );
+      response.user_id = 0;
     }
 
-    return response.accessToken;
+    return response;
   }
 
   /**
@@ -66,7 +68,7 @@ export default class ExternalServices {
    * @returns True if successful, False otherwise
    */
   async signupRequest(user) {
-    let response = { "signupSuccess": false };
+    let responseInfo = { "signupSuccess": false, "errorMessage": "" };
 
     const options = {
       method: "PUT",
@@ -76,15 +78,19 @@ export default class ExternalServices {
       body: JSON.stringify(user),
     };
     if (!TESTING) {
-      response = await fetch(baseURL + "signup", options).then(
-        // Test connection
-        convertToJson
-      );
+      await fetch(baseURL + "signup", options).then(response => {
+        response = convertToJson(response);
+        if (typeof response === 'string') {
+          responseInfo.signupSuccess = true;
+        } else {
+          responseInfo.errorMessage = "Fill out all the information please";
+        }
+      });
     } else {
-      response = await fetch(signupTestURL).then(convertToJson)
+      responseInfo.signupSuccess = true;
     }
 
-    return response.signupSuccess;
+    return responseInfo;
   }
 
   /**
@@ -145,7 +151,7 @@ export default class ExternalServices {
     return response.logoutSuccess;
   }
 
-  async getUser(token) {
+  async getUser(token, id) {
     let response = null;
 
     const options = {
@@ -154,6 +160,7 @@ export default class ExternalServices {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(id),
     };
     if (!TESTING) {
       response = await fetch(baseURL + "user", options).then(
