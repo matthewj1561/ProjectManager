@@ -16,3 +16,7 @@
     background-color: gray;
     border: 1px white;
 }
+
+.hide {
+    display: none;
+}
