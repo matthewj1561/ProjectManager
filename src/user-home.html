@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/landing.css">
     <script src="js/taskPage.js"></script>
-    <script src="js/user-home.js"  type="module"></script>
+    <script src="js/user-home.js"  type="module" defer></script>
     <script src="js/taskAddition.js" defer></script>
 
     
@@ -33,12 +33,12 @@
     <!-- Modal content -->
     <div id="modal-content">
       <span id="close">&times;</span>
-      <script type="module">
+      <!-- <script type="module">
         import Admin from "/js/admin.js";
         const admin = new Admin('modal-content');
         admin.showTaskAddition();
 
-        </script>
+        </script> -->
 
 
     </div>
