@@ -70,6 +70,8 @@ export async function loadHeaderFooter() {
     renderWithTemplate(headerTemplate, domHeader);
     renderWithTemplate(footerTemplate, domFooter);
 
+    manageHeaderLinks();
+
     let navbar = document.querySelector('#header');
 
     if (
@@ -86,32 +88,24 @@ export async function loadHeaderFooter() {
         document.querySelector('#signup').style.display = 'none';
         document.querySelector('.dropdown').style.display = 'block';
     }
+}
 
-    // // Get the offset position of the navbar
-    // let sticky = navbar.offsetTop;
+function manageHeaderLinks() {
+    // Make home page link go to user home if logged in
+    const logoutElement = document.querySelector("#logout");
 
-    // function dynamicNav() {
-    //     if (
-    //         document.body.scrollTop > 80 ||
-    //         document.documentElement.scrollTop > 80
-    //     ) {
-    //         navbar.classList.add('sticky');
-    //         navbar.style.padding = '20px 0px';
-
-    //         document
-    //             .querySelector('#logo-text')
-    //             .classList.add('small-logo-text');
-    //     } else {
-    //         navbar.classList.remove('sticky');
-    //         navbar.style.padding = '50px 10px';
-    //         document
-    //             .querySelector('#logo-text')
-    //             .classList.remove('small-logo-text');
-    //     }
-    // }
-    // window.onscroll = function () {
-    //     dynamicNav();
-    // };
+    if (readAuthToken() !== null) {
+        document.querySelector("#home-nav").href = "/user-home.html";
+        document.querySelector("#login").classList.add('hide');
+        document.querySelector("#signup").classList.add('hide');
+        logoutElement.classList.remove('hide');
+        addOnClick(logoutElement, () => {
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("task-user-id");
+        });
+    } else {
+        logoutElement.classList.add('hide');
+    }
 }
 
 export function validateInput(elementSelector, regexPattern) {
