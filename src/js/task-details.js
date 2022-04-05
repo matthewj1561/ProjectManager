@@ -62,7 +62,6 @@ export default class TaskDetails {
     }
 
     addUsertoTask() {
-        console.log(this.tasks.slice(0, 6));
         let immutable = false;
         for (let i = 0; i < this.tasks.slice(0, 6).length; i++) {
             if (this.task._id == this.tasks[i]._id) {

@@ -75,19 +75,3 @@ footer {
     display: none;
 }
 
-/* @media screen and (max-width: 600px) { 
-    #taskBtn {
-        display: block; 
-    }
-    #filter-selection{
-        display: none !important; 
-    }
-    .filter-selection{
-        display: block !important;
-    }
-    .filter-selection li {
-        color: white;
-        
-
-    }
-}  */

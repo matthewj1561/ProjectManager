@@ -25,3 +25,13 @@
     padding: 15px;
     border-radius: 20px;
 }
+
+#task-display{
+    background-color: aliceblue;
+}
+
+@media screen and (max-width: 500px) {
+    #task-display{
+        grid-template-columns: 1fr;
+    }
+}

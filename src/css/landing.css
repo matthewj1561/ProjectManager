@@ -114,6 +114,14 @@ label{
 
   #submitButton {
       font-size: large;
-      text-align: center;
+      
   }
 
+  @media screen and (max-width: 500px) {
+    #task-display{
+        grid-template-columns: 1fr;
+    }
+    #filter-selection{
+        flex-direction: column;
+    }
+}
