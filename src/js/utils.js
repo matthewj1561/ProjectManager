@@ -92,16 +92,16 @@ export async function loadHeaderFooter() {
 
 function manageHeaderLinks() {
     // Make home page link go to user home if logged in
-    const logoutElement = document.querySelector("#logout");
+    const logoutElement = document.querySelector('#logout');
 
     if (readAuthToken() !== null) {
-        document.querySelector("#home-nav").href = "/user-home.html";
-        document.querySelector("#login").classList.add('hide');
-        document.querySelector("#signup").classList.add('hide');
+        document.querySelector('#home-nav').href = '/user-home.html';
+        document.querySelector('#login').classList.add('hide');
+        document.querySelector('#signup').classList.add('hide');
         logoutElement.classList.remove('hide');
         addOnClick(logoutElement, () => {
-            localStorage.removeItem("authToken");
-            localStorage.removeItem("task-user-id");
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('task-user-id');
         });
     } else {
         logoutElement.classList.add('hide');
@@ -141,6 +141,35 @@ export function readId() {
 
 export function addOnClick(element, action) {
     element.addEventListener('click', action);
+}
+
+export function saveTask(task) {
+    let previousData = localStorage.getItem('task-addition');
+    if (!previousData) {
+        let tasklist = [];
+        tasklist.push(task);
+        localStorage.setItem('task-addition', JSON.stringify(tasklist));
+    } else {
+        previousData = JSON.parse(previousData);
+        let found = false;
+
+        for (let i = 0; i < previousData.length; i++) {
+            let prevtask = previousData[i];
+            if (prevtask._id == task._id) {
+                previousData[i] = task;
+                localStorage.setItem(
+                    'task-addition',
+                    JSON.stringify(previousData)
+                );
+                found = true;
+            }
+        }
+
+        if (!found) {
+            previousData.push(task);
+            localStorage.setItem('task-addition', JSON.stringify(previousData));
+        }
+    }
 }
 
 export function createNewElement(elementType, className, idName, innerString) {

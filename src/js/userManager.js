@@ -72,7 +72,7 @@ export default class UserManager {
         this.filterElement.appendChild(myRequests);
     }
 
-    showTaskList(filteredTasks) {
+    async showTaskList(filteredTasks) {
         // Clear current list first
 
         this.listElement.innerHTML = '';
@@ -89,6 +89,7 @@ export default class UserManager {
     fillTaskThumbnail(element, task) {
         element.querySelector('.title').innerHTML = task.title;
         element.querySelector('.priority').innerHTML += task.priority;
+        element.querySelector('.priority').classList.add(task.priority);
         element.querySelector('.due-date').innerHTML += task.due_date;
 
         element.querySelector('.task-display').href += task._id;
@@ -116,8 +117,9 @@ export default class UserManager {
      */
 
     myTaskFilter() {
+        console.log(this.taskList);
         const filteredList = this.taskList.filter(
-            (task) => task.assigned_to === this.user._id
+            (task) => task.assigned_to == this.user._id
         );
 
         this.updateActiveFilter('#myTasks');
@@ -174,7 +176,7 @@ export default class UserManager {
             alert('Please fill out all fields');
         } else {
             let newTask = new Task();
-            newTask._id = 1000;
+            newTask._id = this.taskList.length;
             newTask.title = title;
             newTask.description = desc;
             newTask.date_created = today;
@@ -186,9 +188,11 @@ export default class UserManager {
             newTask.priority = priority;
 
             await this.services.postTask(newTask);
+            this.taskList = await this.services.getAllTasks(this.token);
             document.getElementById('taskForm').reset();
             const modal = document.getElementById('myModal');
             modal.style.display = 'none';
+
             this.allTaskFilter();
         }
     }
@@ -214,8 +218,8 @@ export default class UserManager {
           <textarea placeholder="Description" id="taskDesc" /></textarea>
           </p>
           
-          <div>
-          <p>Select task status</p>
+          <p>
+          <label for="status">Select Task Status</label>
           
           <select name="status" id="status">
             <option value="Unclaimed">Unclaimed</option>
@@ -223,27 +227,28 @@ export default class UserManager {
             <option value="Completed">Completed</option>
     
           </select>
+          </p>
+          <p>
+          <label for="priority">Priority</label>
+          
+      
 
-          </div>
+          <select name="priority" id="priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+    
+          </select>
+          </p>
 
           <p>
           <label for="duedate">Due Date</label>
           <input type="text" value="${today}" id="dueDate" />
           </p>
 
-          <div>
-          <p>Select task status</p>
           
-      
 
-          <select name="priority" id="priority">
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-    
-          </select>
-
-          </div>
+          
 
           <button type="submit" id="submitButton">Add Task</button>
   

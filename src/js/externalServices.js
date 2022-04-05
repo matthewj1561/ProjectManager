@@ -1,4 +1,5 @@
 import { defaultListOfTasks } from './taskModel';
+import { saveTask } from './utils';
 
 const TESTING = true; // Set to false if using API directly
 
@@ -124,8 +125,17 @@ export default class ExternalServices {
         } else {
             this.tasklist = await fetch(allTasksTestURL).then(convertToJson);
         }
+        let localtasks = JSON.parse(localStorage.getItem('task-addition'));
 
-        return this.tasklist;
+        if (localtasks != null) {
+            localtasks.forEach((task) => {
+                this.tasklist.push(task);
+            });
+            console.log(this.tasklist);
+            return this.tasklist;
+        } else {
+            return this.tasklist;
+        }
     }
 
     /**
@@ -216,21 +226,15 @@ export default class ExternalServices {
             options
         ).then(convertToJson);
 
-        //   response = fetch(
-        //     'https://run.mocky.io/v3/2a4db3d0-4536-40d9-b6fd-47a4caf1a6e6',
-        //     options
-        // ).then((response) => {
-        //     response = convertToJson(response);
-
         // if (typeof response === 'string') {
         //     console.log('success');
         // } else {
         //     console.log('error');
         // }
         // });
-        console.log(this.tasklist);
-        console.log(body);
-        this.tasklist.push(body);
-        console.log(this.tasklist);
+
+        // this.tasklist.push(body);
+
+        saveTask(body);
     }
 }

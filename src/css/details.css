@@ -1,8 +1,32 @@
 main{
     display: grid;
     grid-template-columns: 1fr 1fr;
+    padding: 50px;
 }
 
+p {
+    margin: 20px;
+}
+
+#description{
+    
+    padding: 10px;
+    font-size: medium;
+ 
+}
+
+#desc{
+    margin-bottom: -15px;
+    font-size: large;
+}
+
+.gray{
+    background-color: rgb(236, 236, 236);
+}
+
+.white{
+    background-color: white;
+}
 #taskBtn{
     display:none;
 }
